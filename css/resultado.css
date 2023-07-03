@@ -1,0 +1,59 @@
+.resultado {
+    margin-top: 20px;
+    width: 912px;
+    border: 1px solid #ccc;
+    display: none;
+}
+
+.resultado h2 {
+    text-align: center;
+    padding: 10px 0;
+}
+
+.resultado-comparacao {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.resultado-final {
+    border: 1px solid red;
+    width: 40%;
+    margin: 0 10px 20px 10px;
+}
+
+.resultado-final h3 {
+    padding: 10px;
+}
+
+.linha {
+    display: flex;
+    justify-content: space-around;
+    padding: 5px;
+}
+
+.mostrar-resultado {
+    display: block;
+}
+
+@media (max-width: 992px) {
+    .resultado {
+        width: 70%;
+    }
+}
+
+@media (max-width: 768px){
+    .resultado-comparacao{
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .resultado-final {
+        width: 90%;
+    }
+}
+
+@media (max-width: 450px) {
+    .resultado {
+        width: 90%;
+    }
+}

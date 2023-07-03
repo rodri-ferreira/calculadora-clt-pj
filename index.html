@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora pj x clt</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/resultado.css">
+</head>
+<body>
+
+    <div class="container">
+        <h1>Calculadora PJ X CLT</h1>
+        <form class="calculadora">
+            <div class="container-form">
+                <div class="container-form-celula">
+                    <label for="salario-bruto">Salario mensal bruto:</label>
+                    <input type="text" placeholder="R$ 0,00" id="salarioBruto">
+                </div>
+                <div class="container-form-celula">
+                    <label for="vale-refeicao">Vale refeição/alimentação(Opcional):</label>
+                    <input type="text" placeholder="R$ 0,00" id="valeRefeicao">
+                </div>
+                <div class="container-form-celula">
+                    <label for="vale-transporte">Vale-transporte(Opcional)</label>
+                    <input type="text" placeholder="R$ 0,00" id="ValeTransporte">
+                </div>
+            </div>
+            <div class="container-form">
+                <div class="container-form-celula">
+                    <label for="plano-saude">plano de saude(Opcional):</label>
+                    <input type="text" placeholder="R$ 0,00" id="planoSaude">
+                </div>
+                <div class="container-form-celula">
+                    <label for="outros-beneficios">Outros benefícios(Opcional):</label>
+                    <input type="text" placeholder="R$ 0,00" id="beneficios">
+                </div>
+                <div class="container-form-celula">
+                    <label for="dependentes">Dependentes(Opcional):</label>
+                    <input type="number" id="dependentes" autocomplete="off" placeholder="0">
+                </div>
+            </div>
+
+            <button class="btn-calcular">Calcular</button>
+        </form>
+
+        <div class="resultado">
+            <h2>Resultado comparativo</h2>
+
+            <div class="resultado-comparacao">
+                <div class="resultado-final">
+                    <h3>CLT (Pessoa física)</h3>
+                    <span class="linha"> 
+                        <span>Salário bruto:</span>
+                        <span class="sBruto">R$ 50000</span>
+                    </span>
+
+                    <span class="linha"> 
+                        <span>(-) Descontos</span>
+                        <span class="desconto">R$ 50000</span>
+                    </span>
+
+                    <span class="linha"> 
+                        <span>(+) Benefícios:</span>
+                        <span class="beneficio">R$ 50000</span>
+                    </span>
+
+                    <span class="linha"> 
+                        <span>Salário líquido</span>
+                        <span class="sLiquido">R$ 50000</span>
+                    </span>
+                </div>
+                <div class="resultado-final">
+                    <h3>PJ (Pessoa jurídica)</h3>
+                    <span class="linha"> 
+                        <span>Salário bruto:</span>
+                        <span class="sBrutoPj">R$ 50000</span>
+                    </span>
+
+                    <span class="linha"> 
+                        <span>(-) Descontos</span>
+                        <span class="descontoPj">R$ 50000</span>
+                    </span>
+
+                    <span class="linha"> 
+                        <span>(+) Benefícios:</span>
+                        <span class="beneficioPj">R$ 50000</span>
+                    </span>
+
+                    <span class="linha"> 
+                        <span>Salário líquido</span>
+                        <span class="sLiquidoPj">R$ 50000</span>
+                    </span>
+                </div>
+            </div>
+            
+        </div>
+
+    </div>
+
+    <script src="js/main.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.js"></script>
+    <script>
+        $('#salarioBruto').mask('000.000.000.000.000,00', {reverse: true});
+        $('#valeRefeicao').mask('000.000.000.000.000,00', {reverse: true});
+        $('#ValeTransporte').mask('000.000.000.000.000,00', {reverse: true});
+        $('#planoSaude').mask('000.000.000.000.000,00', {reverse: true});
+        $('#beneficios').mask('000.000.000.000.000,00', {reverse: true});
+    </script>
+</body>
+</html>
