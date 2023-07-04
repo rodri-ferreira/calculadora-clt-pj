@@ -5,6 +5,7 @@ const valeRefeicao = document.querySelector('#valeRefeicao');
 const valeTransporte = document.querySelector('#valeTransporte');
 const planoSaude = document.querySelector('#planoSaude');
 const outrosBeneficios = document.querySelector('#beneficios');
+const dependentes = document.querySelector('#dependentes')
 
 
 // função para converter os valores recebidos no input em number
@@ -14,17 +15,111 @@ const converterStringNumber = (valorString) => {
     return parseFloat(convertido);
 }
 
-
-
-
-
-
+//função para calcular o salario clt
 const calcularSalarioClt = () => {
     const salarioConvertido = converterStringNumber(salarioBruto.value);
 
-    const fgtsAnual = (salarioConvertido * 12) * 0.08;
+    const calcularInss = (salarioBruto) => {
+        let inssPagar;
+        if(salarioBruto >= 1320.01 && salarioBruto <= 2571.29) {
+            return inssPagar = ((salarioBruto - 1320) * 0.09) + 99
+        } else if(salarioBruto >= 2571.30 && salarioBruto <= 3856.94) {
+            return inssPagar = ((salarioBruto - 2571.29 ) * 0.12) + 211.62
+        } else if(salarioBruto >= 3856.95 && salarioBruto <= 7507.49) {
+            return inssPagar = ((salarioBruto - 3856.94 ) * 0.14) + 365.90
+        } else {
+            return inssPagar = 876.97 
+        }
+    }
+
+    const calcularIrpf = (salarioBruto) => {
+        let valorInss = calcularInss(salarioConvertido);
+        let nDependentes = dependentes.value > 0 ? dependentes.value : 0;
+        let valorTotalDependentes = nDependentes * 189.59
+        let valorDescontoBase = valorInss + valorTotalDependentes
+        let baseCalculo;
+        let valorApagar;
+
+        if(valorDescontoBase < 528) {
+            baseCalculo = salarioBruto - 528;
+            if(baseCalculo <= 2112.00) {
+                return 0
+            } else if(baseCalculo >= 2112.01 && baseCalculo <= 2826.65) {
+                return valorApagar = (baseCalculo * 0.075) - 158.40;
+            } else if(baseCalculo >= 2826.66 && baseCalculo <= 3751.06) {
+                return valorApagar = (baseCalculo * 0.15) - 370.40;
+            } else if(baseCalculo >= 3751.07 && baseCalculo <= 4664.68) {
+                return valorApagar = (baseCalculo * 0.225) - 651.73;
+            } else {
+                return valorApagar = 884.96;
+            }
+
+        } else {
+            baseCalculo = salarioBruto - valorDescontoBase;
+            if(baseCalculo <= 2112.00) {
+                return 0
+            } else if(baseCalculo >= 2112.01 && baseCalculo <= 2826.65) {
+                return valorApagar = (baseCalculo * 0.075) - 158.40;
+            } else if(baseCalculo >= 2826.66 && baseCalculo <= 3751.06) {
+                return valorApagar = (baseCalculo * 0.15) - 370.40;
+            } else if(baseCalculo >= 3751.07 && baseCalculo <= 4664.68) {
+                return valorApagar = (baseCalculo * 0.225) - 651.73;
+            } else {
+                return valorApagar = 884.96;
+            }
+        }
+    }
+
+    setarValoresResultadosClt(calcularInss(salarioConvertido), calcularIrpf(salarioConvertido), salarioConvertido);
+
+    const salarioLiquido = salarioConvertido - calcularInss(salarioConvertido) - calcularIrpf(salarioConvertido).toFixed(2);
+
+    return salarioLiquido
+}
+
+// função resposavel por calcular o valor das férias do funcionario
+const calcularFerias = (salarioBruto) => {
+    const salarioFerias = salarioBruto + (salarioBruto / 3)
+    const salarioFeriasLiquido = salarioFerias - (calcularInss(salarioFerias) + calcularIrpf(salarioFerias));
+    return salarioFeriasLiquido
+}
+
+
+const setarValoresResultadosClt = (valorInss, valorIrpj, salarioBruto) => {
+    const salarioBrutoResult = document.querySelector('.sBruto');
+    const descontoResult = document.querySelector('.desconto');
+    const beneficiosResult = document.querySelector('beneficio');
+    const salarioMensalResult = document.querySelector('sMensal');
+
+    const descontoSet = valorInss + valorIrpj;
+    
+
+    salarioBrutoResult.innerHTML = salarioBruto.toLocaleString('pt-BR', {
+        style: 'currency',
+        currency: 'BRL'
+      });;
+    descontoResult.innerHTML = descontoSet.toLocaleString('pt-BR', {
+        style: 'currency',
+        currency: 'BRL'
+      });;
+   
+    // beneficiosResult.innerHTML = setarBeneficios().toLocaleString('pt-BR', {
+    //     style: 'currency',
+    //     currency: 'BRL'
+    //   });;
 
 }
+
+    
+const setarBeneficios = () => {
+    return valeRefeicao.value + outrosBeneficios.value
+}
+
+
+
+
+
+
 
 
 
@@ -40,6 +135,7 @@ const calcularSalario = (e) =>  {
     if(salarioConvertido >= 1320) {
         divResultado.classList.add('mostrar-resultado')
         calcularSalarioClt()
+        setarBeneficios()
 
     }
 }
