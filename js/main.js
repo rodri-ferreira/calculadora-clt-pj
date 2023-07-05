@@ -20,7 +20,7 @@ const calcularSalarioClt = () => {
     const salarioConvertido = converterStringNumber(salarioBruto.value);
 
     const calcularInss = (salarioBruto) => {
-        let inssPagar;
+        let inssPagar = 0;
         if(salarioBruto >= 1320.01 && salarioBruto <= 2571.29) {
             return inssPagar = ((salarioBruto - 1320) * 0.09) + 99
         } else if(salarioBruto >= 2571.30 && salarioBruto <= 3856.94) {
@@ -73,6 +73,9 @@ const calcularSalarioClt = () => {
     setarValoresResultadosClt(calcularInss(salarioConvertido), calcularIrpf(salarioConvertido), salarioConvertido);
 
     const salarioLiquido = salarioConvertido - calcularInss(salarioConvertido) - calcularIrpf(salarioConvertido).toFixed(2);
+
+    console.log(calcularInss(salarioConvertido) + " inss pagar")
+    console.log(calcularIrpf(salarioConvertido) + " irpj pagar")
 
     return salarioLiquido
 }
