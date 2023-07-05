@@ -7,7 +7,8 @@ const planoSaude = document.querySelector('#planoSaude');
 const outrosBeneficios = document.querySelector('#beneficios');
 const dependentes = document.querySelector('#dependentes');
 const btnLimpar = document.querySelector('#limparInputs');
-
+let inssPagar;
+let irpjPagar;
 
 // função para converter os valores recebidos no input em number
 const converterStringNumber = (valorString) => {
@@ -17,12 +18,18 @@ const converterStringNumber = (valorString) => {
     return parseFloat(convertido);
 }
 
+// const converterStringNumber2 = (valorString) => {
+//     let valorCoveter;
+//     valorString === ''? valorCoveter = '0,00' : valorCoveter = valorString;
+//     let convertido = valorCoveter.replace(/\./g, "").replace(",", ".");
+//     return parseFloat(convertido);
+// }
+
 //função para calcular o salario clt
 const calcularSalarioClt = () => {
     const salarioConvertido = converterStringNumber(salarioBruto.value);
 
     const calcularInss = (salarioBruto) => {
-        let inssPagar = 0;
         if(salarioBruto >= 1320.01 && salarioBruto <= 2571.29) {
             return inssPagar = ((salarioBruto - 1320) * 0.09) + 99
         } else if(salarioBruto >= 2571.30 && salarioBruto <= 3856.94) {
@@ -72,63 +79,68 @@ const calcularSalarioClt = () => {
         }
     }
 
+    inssPagar = calcularInss(salarioConvertido)
+    irpjPagar = calcularIrpf(salarioConvertido)
+
     setarValoresResultadosClt(calcularInss(salarioConvertido), calcularIrpf(salarioConvertido), salarioConvertido);
-
     const salarioLiquido = salarioConvertido - calcularInss(salarioConvertido) - calcularIrpf(salarioConvertido).toFixed(2);
-
     alert(calcularInss(salarioConvertido).toFixed(2) + " inss pagar " + calcularIrpf(salarioConvertido).toFixed(2) + " irpj pagar")
-
     return salarioLiquido
 }
 
 // função resposavel por calcular o valor das férias do funcionario
 const calcularFerias = (salarioBruto) => {
     const salarioFerias = salarioBruto + (salarioBruto / 3)
-    const salarioFeriasLiquido = salarioFerias - (calcularInss(salarioFerias) + calcularIrpf(salarioFerias));
+    const salarioFeriasLiquido = salarioFerias - inssPagar + irpjPagar;
     return salarioFeriasLiquido
 }
 
-
+// função responsável por setar os valores na seção resultados
 const setarValoresResultadosClt = (valorInss, valorIrpj, salarioBruto) => {
     const salarioBrutoResult = document.querySelector('.sBruto');
     const descontoResult = document.querySelector('.desconto');
     const beneficiosResult = document.querySelector('.beneficio');
     const salarioMensalResult = document.querySelector('.sMensal');
 
-
     const descontoSet = valorInss + valorIrpj;
     const salarioLiquidoMensalResult = (salarioBruto + setarBeneficios()) - descontoSet;
     
-
     salarioBrutoResult.innerHTML = salarioBruto.toLocaleString('pt-BR', {
         style: 'currency',
         currency: 'BRL'
-      });;
+    });;
     descontoResult.innerHTML = descontoSet.toLocaleString('pt-BR', {
         style: 'currency',
         currency: 'BRL'
-      });;
+    });;
    
     beneficiosResult.innerHTML = setarBeneficios().toLocaleString('pt-BR', {
         style: 'currency',
         currency: 'BRL'
-      });;
+    });;
 
       salarioMensalResult.innerHTML = salarioLiquidoMensalResult.toLocaleString('pt-BR', {
         style: 'currency',
         currency: 'BRL'
-      });;;
+    });;;
 
 }
 
-    
+// função responsável por calcular os valores e setar 
 const setarBeneficios = () => {
     const valeRefeicaoConvertido = converterStringNumber(valeRefeicao.value);
     const valeTransporteConvertido = converterStringNumber(valeTransporte.value);
     const planoSaudeConvertido = converterStringNumber(planoSaude.value);
     const outrosBeneficiosConvertido = converterStringNumber(outrosBeneficios.value);
+
+    // const ferias = calcularFerias(converterStringNumber2(salarioBruto.value));
+    // const decimo13 = calcularSalarioClt();
+    // const fgts = converterStringNumber2(salarioBruto.value) * 0.08;
+
+    const beneficiosObrigatorio = 0 //(ferias + decimo13 + fgts) / 12
     
-    const somaBeneficios = valeRefeicaoConvertido + valeTransporteConvertido + planoSaudeConvertido + outrosBeneficiosConvertido 
+    const somaBeneficios = valeRefeicaoConvertido + valeTransporteConvertido + planoSaudeConvertido + outrosBeneficiosConvertido + beneficiosObrigatorio;
+
     return somaBeneficios
 }
 
@@ -138,15 +150,14 @@ const calcularSalario = (e) =>  {
 
     const salarioConvertido = converterStringNumber(salarioBruto.value);
     
-   
     if(salarioConvertido >= 1320) {
         divResultado.classList.add('mostrar-resultado')
         calcularSalarioClt()
         setarBeneficios()
-
     }
 }
 
+// função responsável por limpar os campos de entrada de valores
 const limparCampos = () => {
     divResultado.classList.remove('mostrar-resultado')
     salarioBruto.value = ''
@@ -157,5 +168,5 @@ const limparCampos = () => {
     dependentes.value = ''
 }
 
-btnCalcular.addEventListener('click', calcularSalario)
-btnLimpar.addEventListener('click', limparCampos)
+btnCalcular.addEventListener('click', calcularSalario);
+btnLimpar.addEventListener('click', limparCampos);
